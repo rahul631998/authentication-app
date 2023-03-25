@@ -22,7 +22,7 @@ const userSchema = {
     password: String
 };
 
-const User = new mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
 app.get("/", (req, res) => {
     res.render("home");
@@ -45,6 +45,23 @@ app.post("/register", (req, res) => {
     newUser.save()
         .then(() => {
             res.render("secrets")
+        })
+        .catch((err) => {
+            res.send(err);
+        });
+});
+
+app.post("/login", (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    User.findOne({email: username})
+        .then((foundUser) => {
+            if (foundUser.password === password) {
+                res.render("secrets")
+            } else {
+                res.redirect("/");
+            }
         })
         .catch((err) => {
             res.send(err);
