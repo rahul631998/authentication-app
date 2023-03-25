@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -9,11 +10,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public")); 
 app.set('view engine', 'ejs');
 
-// const dbUsername = process.env.DB_USERNAME;
-// const dbPassword = process.env.DB_PASSWORD;
-// const url = "mongodb+srv://"+dbUsername+":"+dbPassword+"@cluster0.htya6dh.mongodb.net";
-const url = "mongodb://127.0.0.1:27017"
-const dbName = "userDB";
+const dbUsername = process.env.DB_USERNAME;
+const dbPassword = process.env.DB_PASSWORD;
+const url = process.env.DB_URL || "127.0.0.1:27017";
+const dbName = process.env.DB_NAME;
 
 mongoose.connect(url+'/'+dbName);
 
@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema ({
     password: String
 });
 
-const secret = "That is a secret key";
+const secret = process.env.SECRET;
 
 userSchema.plugin(encrypt, {secret: secret, encryptedFields: ["password"]});
 const User = mongoose.model("User", userSchema);
