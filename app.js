@@ -109,15 +109,14 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/secrets", (req, res) => {
-    User.find({"secret": {$ne: null}})
-    .then((foundUsers) => {
-        res.render("secrets", {usersWithSecrets: foundUsers})
+    User.find({ secret: { $ne: null } }).then((foundUsers) => {
+        res.render("secrets", { usersWithSecrets: foundUsers });
     });
 });
 
 app.get("/logout", (req, res) => {
     req.logout(() => {
-        console.log("logged out");
+         console.log("logged out");
     });
     res.redirect("/");
 });
